@@ -16,7 +16,10 @@ app.get('/', (req,res) =>{
 });
 
 app.post('/', (req,res) =>{
-    res.send('Account succesfully created!');
+req.on('data', data => {
+    console.log(data.toString('utf8'));
+});
+res.send('Account succesfully created!');
 });
 
 app.listen(3000, () => {
