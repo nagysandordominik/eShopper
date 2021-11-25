@@ -1,3 +1,5 @@
+const { create } = require('domain');
+const { json } = require('express');
 const fs = require('fs');
 
 class UsersRepository {
@@ -13,14 +15,25 @@ class UsersRepository {
         }
     }
     async getAll() {
-        return JSON.parse(await fs.promises.readFile(this.filename, {
+        return JSON.parse(
+            await fs.promises.readFile(this.filename, {
             encoding:'utf8'
-        }));
-    }
+        })
+    );
+}
+    async create(attrs) {
+        const records = await this.getAll();
+        records.push(attrs);
+
+        await fs.promises.writeFile(this.filename, JSON.stringify(records));
+        }
+    
 }
 
 const test = async () => {
     const repo = new UsersRepository('users.json');
+
+    await repo.create({email: 'thesatyka@gmail.com', password:'admin'})
 
     const users = await repo.getAll();
 
