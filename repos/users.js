@@ -1,6 +1,8 @@
 const { create } = require('domain');
 const { json } = require('express');
 const fs = require('fs');
+const crypto = require('crypto');
+const { get } = require('http');
 
 class UsersRepository {
     constructor(filename){
@@ -22,27 +24,34 @@ class UsersRepository {
     );
 }
     async create(attrs) {
+        attrs.id = this.randomId();
         const records = await this.getAll();
         records.push(attrs);
 
         await this.writeAll(records);
         }
+
     async writeAll(records) {
         await fs.promises.writeFile(
             this.filename, 
-            JSON.stringify(records,null,2)
+            JSON.stringify(records,null,2) 
         );
+    }
+    randomId() {
+        return crypto.randomBytes(4).toString('hex');
+    }
+    async getOne(id) {
+        const records = await this.getAll();
+        return records.find(record => record.id === id);
     }
 }
 
 const test = async () => {
     const repo = new UsersRepository('users.json');
 
-    await repo.create({email: 'thesatyka@gmail.com', password:'admin'})
+    const user = await repo.getOne('288dcbc0');
 
-    const users = await repo.getAll();
-
-    console.log(users);
+    console.log(user);
 };
 
 test();
