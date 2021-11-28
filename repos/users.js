@@ -4,6 +4,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const { get } = require('http');
 
+
 class UsersRepository {
     constructor(filename){
         if (!filename) {
@@ -77,19 +78,9 @@ class UsersRepository {
             
             if (found) {
                 return record;
-            } else {
-                throw new Error ('User not found...')
-            }
+            } 
         }
     }
 }
 
-const test = async () => {
-    const repo = new UsersRepository('users.json');
-
-    const user = await repo.getOneBy( {email: 'asd@test.hu'});
-
-    console.log(user);
-};
- 
-test();
+module.exports = new UsersRepository('users.json');
