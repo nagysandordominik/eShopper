@@ -32,7 +32,6 @@ app.post('/', async (req,res) => {
     if (password !== passwordConfirmation) {
         return res.send('Password must match...')
     }
-
     res.send('Account succesfully created!');
 });
 
