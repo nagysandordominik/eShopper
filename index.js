@@ -42,7 +42,6 @@ app.post('/signup', async (req,res) => {
     req.session.userId = user.id;
 
     res.send('Account succesfully created!');
-    res.send(`<div> Your id: ${req.session.userId} </div>`);
 });
 
 app.get('/signout', (req,res) =>{
@@ -71,8 +70,12 @@ app.post('/signin', async (req,res) => {
         return res.send('Email not found...');
     }
 
-    if (user.password != password) {
-        return res.send('Invalid password...');
+    const validPassword = await usersRepo.comparePass(
+        user.password,
+        password
+    );
+    if (!validPassword){
+        return res.send('Invalid password!')
     }
     req.session.userId = user.id;
 
