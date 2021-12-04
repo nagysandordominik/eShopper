@@ -1,6 +1,7 @@
 const express = require('express');
-const usersRepo = ('../../repos/users');
-const signupTemp = require('../../views/admin/auth/signup');
+const usersRepo = require('../../../repos/users');
+const signupTemp = require('../../../views/admin/auth/signup');
+const signinTemp = require('../../../views/admin/auth/signin');
 
 const router = express.Router();
 
@@ -33,15 +34,7 @@ router.get('/signout', (req,res) =>{
 });
 
 router.get('/signin', (req,res) =>{
-    res.send(`
-    <div>
-        <form method='POST'>
-            <input name='email' placeholder='email' />
-            <input name='password' placeholder='password' />
-            <button> Sign in </button>
-        </form>
-    </div>
-    `);
+    res.send(signinTemp({req}));
 });
 
 router.post('/signin', async (req,res) => {
