@@ -5,6 +5,8 @@ const usersRepo = require('../../../repos/users');
 const signupTemp = require('../../../views/admin/auth/signup');
 const signinTemp = require('../../../views/admin/auth/signin');
 const {requireEmail, requirePassword,requirePasswordConfirmation} = require('./validators');
+const { getOneBy } = require('../../../repos/users');
+const req = require('express/lib/request');
 
 const router = express.Router();
 
@@ -45,22 +47,46 @@ router.get('/signin', (req,res) =>{
     res.send(signinTemp({req}));
 });
 
-router.post('/signin', async (req,res) => {
+router.post('/signin',[
+    check('email')
+        .trim()
+        .normalizeEmail()
+        .isEmail()
+        .withMessage('Must provide a valid email!')
+        .custom(
+            async (email) => {
+            const user = await usersRepo.getOneBy({email});
+                if (!user) {
+                    throw new Error ('Email not found!')
+                }
+        }),
+    check('password')
+        .trim()
+        .custom(async(password, {req}) => {
+            const user = await usersRepo.getOneBy({email: req.body.email});
+            if (!user) {
+                throw new Error ('Invalid password!')
+            }
+
+            const validPassword = await usersRepo.comparePass(
+                user.password,
+                password
+            );
+            if (!validPassword){
+                throw new Error ('Invalid password!')
+            }
+        })
+    ], 
+    async (req,res) => {
     const { email, password } = req.body;
 
     const user = await usersRepo.getOneBy({ email });
 
-    if (!user){
+    if (!user) {
         return res.send('Email not found...');
     }
 
-    const validPassword = await usersRepo.comparePass(
-        user.password,
-        password
-    );
-    if (!validPassword){
-        return res.send('Invalid password!')
-    }
+    
     req.session.userId = user.id;
 
     res.send('You are signed in!')
