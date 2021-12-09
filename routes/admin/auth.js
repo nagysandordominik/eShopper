@@ -1,11 +1,10 @@
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 
-const usersRepo = require('../../../repos/users');
-const signupTemp = require('../../../views/admin/auth/signup');
-const signinTemp = require('../../../views/admin/auth/signin');
+const usersRepo = require('../../repos/users');
+const signupTemp = require('../../views/admin/auth/signup');
+const signinTemp = require('../../views/admin/auth/signin');
 const {requireEmail, requirePassword,requirePasswordConfirmation} = require('./validators');
-const { getOneBy } = require('../../../repos/users');
 const req = require('express/lib/request');
 
 const router = express.Router();

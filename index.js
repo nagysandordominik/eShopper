@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const usersRepo = require('./repos/users');
-const users = require('./repos/users');
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 const authRouter = require('./routes/admin/auth')
 
 const app = express();

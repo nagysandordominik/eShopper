@@ -1,4 +1,3 @@
-const { get } = require("../../../repos/routes/admin/auth");
 const layout = require("../layout");
 const getError = (errors,prop) => {
     try {
