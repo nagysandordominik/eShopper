@@ -1,9 +1,9 @@
-const layout = require("../layout");
+const layout = require('../layout');
 const {getError} = require('../../helpers');
 
 module.exports = ({req,errors}) => {
     return layout({
-content:`
+content: `
     <div>
     Your id is: ${req.session.userId}
         <form method='POST'>
