@@ -36,13 +36,16 @@ router.get('/signout', (req,res) =>{
 });
 
 router.get('/signin', (req,res) =>{
-    res.send(signinTemp({req}));
+    res.send(signinTemp({}));
 });
 
 router.post('/signin',[requireEmailExists, requireValidPassword], 
     async (req,res) => {
     const errors = validationResult(req);
-    console.log(errors);
+    
+    if (!errors.isEmpty()) {
+        return res.send(signinTemp({errors}));
+    }
 
     const { email } = req.body;
 
