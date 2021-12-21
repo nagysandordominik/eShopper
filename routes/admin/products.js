@@ -1,6 +1,5 @@
 const express = require('express');
 
-const { handleErrors } = require('./middlewares')
 const productRepo = require('../../repos/products');
 const productsNewTemp = require('../../views/admin/products/new')
 const productsIndexTemp = require('../../views/admin/products/index')
@@ -11,7 +10,7 @@ const { handleErrors } = require('./middlewares');
 const router = express.Router();
 const upload = multer({ storage:multer.memoryStorage() });
 
-router.get('/admin/products',(req,res) => {
+router.get('/admin/products', async (req,res) => {
     const products = await productRepo.getAll();
     res.send(productsIndexTemp({products}))
 });
