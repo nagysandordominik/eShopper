@@ -10,7 +10,7 @@ const { handleErrors } = require('./middlewares');
 const router = express.Router();
 const upload = multer({ storage:multer.memoryStorage() });
 
-router.get('/admin/products', async (req,res) => {
+router.get('/admin/products', async(req,res) => {
     const products = await productRepo.getAll();
     res.send(productsIndexTemp({products}))
 });
@@ -24,11 +24,11 @@ router.post('/admin/products/new',
     [requireTitle,requirePrice],
     handleErrors(productsNewTemp),  
     async (req,res) => {
-        console.log(req.file.buffer.toString('base64'));
+        const image = req.file.buffer.toString('base64');
         const {title, price} = req.body;
         await productRepo.create({title,price,image}); 
 
-    res.send('submitted');
+    res.redirect('/admin/products');
     }
 );
 
