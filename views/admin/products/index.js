@@ -10,7 +10,7 @@ module.exports = ({ products }) => {
         <td>
           <a href="">
             <button class="button is-link">
-              Edit1
+              Edit
             </button>
           </a>
         </td>
