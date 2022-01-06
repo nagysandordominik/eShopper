@@ -1,5 +1,6 @@
 const express = require('express');
 const cartsRepo = require('../repos/carts');
+const productsRepo = require('../repos/products');
 const router = express.Router();
 
 router.post('/cart/products', async (req,res) => {
@@ -19,7 +20,21 @@ router.post('/cart/products', async (req,res) => {
    await cartsRepo.update(cart.id, {
         items: cart.items
    });
+   res.send('Product added to cart!')
+});
 
+router.get('/cart', async (req,res) => {
+     if (!req.session.cartId) {
+          return res.redirect('/');
+     }
+     const cart = await cartsRepo.getOne(req.session.cartId);
+
+     for (let item of cart.items) {
+          const product = await productsRepo.getOne(item.id);
+
+          item.product = product;
+     }     
+     res.send(cartShowTemp({items: cart.items}));
 });
 
 module.exports = router;
