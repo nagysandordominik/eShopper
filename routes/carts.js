@@ -1,6 +1,8 @@
 const express = require('express');
 const cartsRepo = require('../repos/carts');
 const productsRepo = require('../repos/products');
+const cartShowTemp = require('../views/carts/show');
+
 const router = express.Router();
 
 router.post('/cart/products', async (req,res) => {
