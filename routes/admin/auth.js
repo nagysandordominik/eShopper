@@ -52,7 +52,7 @@ router.post(
     
     req.session.userId = user.id;
 
-    res.send('/admin/products')
+    res.send('/admin/products');
 });
 
 module.exports = router;
